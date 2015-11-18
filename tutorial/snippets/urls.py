@@ -2,7 +2,7 @@
 # from rest_framework.urlpatterns import format_suffix_patterns
 # from snippets import views
 
-from snippets.views import SnippetViewSet, UserViewSet, api_root, PFRtoGuidViewSet, GameViewSet
+from snippets.views import SnippetViewSet, UserViewSet, api_root, PFRtoGuidViewSet, GameViewSet, SeasonViewSet, CareerViewSet
 from rest_framework import renderers
 
 pfrguids_list = PFRtoGuidViewSet.as_view({
@@ -26,11 +26,20 @@ pfrguids_fetch_guid_only = PFRtoGuidViewSet.as_view({
 games_list = GameViewSet.as_view({
     'get': 'list',
     'post': 'create'
-    
 })
 
 games_detail = GameViewSet.as_view({
     'delete': 'destroy'
+})
+
+seasons_list = SeasonViewSet.as_view({
+    'get':'list'
+    'post': 'create'
+})
+
+careers_list = CareerViewSet.as_view({
+    'get':'list'
+    'post': 'create'
 })
 
 snippet_list = SnippetViewSet.as_view({
@@ -73,8 +82,13 @@ urlpatterns = format_suffix_patterns([
 
     # Game log route
     url(r'^games/$', games_list, name='games-list'),
-    url(r'^games/(?P<pk>[0-9]+)/$', games_detail, name='games-detail'),
+    url(r'^games/(?P<pk>[a-zA-z0-9]+)/$', games_detail, name='games-detail'),
 
+    # Season route
+    url(r'^seasons/$', seasons_list, name='seasons-list'),
+
+    # Career route
+    url(r'^careers/$', careers_list, name='careers-list'),
 ])
 
 # # API endpoints

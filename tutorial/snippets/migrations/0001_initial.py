@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='GameModel',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('game_guid', models.CharField(max_length=51, serialize=False, primary_key=True)),
                 ('pguid', models.CharField(max_length=40)),
                 ('year', models.IntegerField()),
                 ('game_count_played', models.IntegerField()),

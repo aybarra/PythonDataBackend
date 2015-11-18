@@ -1,5 +1,5 @@
-from snippets.models import Snippet, PFRtoGuidModel, GameModel
-from snippets.serializers import SnippetSerializer, PFRGuidSerializer, GameSerializer
+from snippets.models import Snippet, PFRtoGuidModel, GameModel, SeasonModel, CareerModel
+from snippets.serializers import SnippetSerializer, PFRGuidSerializer, GameSerializer, SeasonSerializer, CareerSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
 from snippets.serializers import UserSerializer
@@ -18,6 +18,13 @@ from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 
 from django.shortcuts import get_object_or_404
+
+# Filtering
+import django_filters
+from rest_framework import filters
+
+# Serializing joined tables
+from django.core import serializers
 
 @api_view(('GET',))
 def api_root(request, format=None):
@@ -51,17 +58,12 @@ class SnippetViewSet(viewsets.ModelViewSet):
 class PFRtoGuidViewSet(viewsets.ModelViewSet):
     serializer_class = PFRGuidSerializer
     queryset = PFRtoGuidModel.objects.all()
+    # lookup_field = 'pguid'
 
     def perform_create(self, serializer):
         serializer.save()
+        # return Response(self.request.pguid)
     
-    # def retrieve(self, request, pk=None):
-    #     queryset = PFRtoGuidModel.objects.all()
-    #     pfr_name = request.query_params.get('pro_football_ref_name', None)
-    #     if pfr_name is not None:
-    #         queryset = queryset.filter(pro_football_ref_name=pfr_name) 
-    #     return Response(queryset)
-
     ''' Fetches name, pfr_name and guid '''
     def retrieve(self, request, pk=None):
         queryset = PFRtoGuidModel.objects.all()
@@ -69,12 +71,40 @@ class PFRtoGuidViewSet(viewsets.ModelViewSet):
         serializer = PFRGuidSerializer(player)
         return Response(serializer.data)
 
+     # @detail_route(url_path='player_name')
     @detail_route(url_path='guid')
     def retrieve_guid_only(self, request, *args, **kwargs):
-        # queryset = PFRtoGuidModel.objects.all()
         player = self.get_object()
-        # serializer = PFRGuidSerializer(player)
-        return Response({"pguid": player.pguid})
+        return Response({'pguid': player.pguid})
+
+class CareerFilter(django_filters.FilterSet):
+    start_year = django_filters.NumberFilter(name="start_year", lookup_type='gte')
+    ff_pts = django_filters.NumberFilter(name="ff_pts", lookup_type='gte')
+
+    class Meta:
+        model = CareerModel
+        fields = ['start_year', 'ff_pts']
+
+class CareerViewSet(viewsets.ModelViewSet):
+    serializer_class = CareerSerializer
+    queryset = CareerModel.objects.all().select_related('pfrtoguidmodel')
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = CareerFilter
+    # lookup_field = 'pfrtoguidmodel__player_name'
+
+    # def list(self, request):
+    #     queryset = CareerModel.objects.all().select_related('pfrtoguidmodel')
+    #     serializer = CareerSerializer(queryset, many=True)
+    #     return Response(serializer.data)
+    def perform_create(self, serializer):
+        serializer.save()
+
+class SeasonViewSet(viewsets.ModelViewSet):
+    serializer_class = SeasonSerializer
+    queryset = SeasonModel.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 class GameViewSet(viewsets.ModelViewSet):
     serializer_class = GameSerializer

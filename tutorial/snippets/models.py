@@ -13,6 +13,10 @@ STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
 
 from rest_framework import serializers
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.shortcuts import get_object_or_404
+
 class Snippet(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=True, default='')
@@ -50,36 +54,73 @@ class Snippet(models.Model):
 
 ''' Model for mapping the name to the guid ''' 
 class PFRtoGuidModel(models.Model):
-	# owner = models.ForeignKey('auth.User')
-	pro_football_ref_name = models.CharField(primary_key=True, max_length=30, blank=False)
-	player_full_name = models.CharField(primary_key=False, max_length=50, blank=False)
-	pguid = models.CharField(primary_key=False, max_length=40, blank=True, editable=False)
+    pfr_name = models.CharField(primary_key=True, max_length=30)
+    player_name = models.CharField(primary_key=False, max_length=50)
+    pguid = models.CharField(primary_key=False, max_length=40, blank=True, editable=False, unique=True)
+    pos_type = models.CharField(choices=(('qb','qb'),('te','te'),('wr','wr'),('rb','rb')), default='ER', max_length=2)
 
-	def save(self, *args, **kwargs):
-		if not self.pguid:
-			self.pguid = hashlib.sha1(str(random.random())).hexdigest()
-		super(PFRtoGuidModel, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if not self.pguid:
+            self.pguid = hashlib.sha1(str(random.random())).hexdigest()
+        super(PFRtoGuidModel, self).save(*args, **kwargs)
 
-# ''' Model for career data ''' 
-# class CareerModel(models.Model):
-#     pguid = models.UUIDField(primary_key=True, format='hex_verbose', blank=False, editable=False)
-#     ff_pts = models.IntegerField()
-#     start_date = models.DateField()
-#     end_date = models.DateField()
-#     win_pct = models.DecimalField(max_digits=5, decimal_places=2)
+''' Model for career data ''' 
+class CareerModel(models.Model):
+    pguid = models.CharField(primary_key=True, max_length=40)
+    ff_pts = models.IntegerField()
+    start_year = models.IntegerField()
+    end_year = models.IntegerField()
+    win_pct = models.DecimalField(max_digits=5, decimal_places=3)
+    active = models.BooleanField(default=False)
+    pfrtoguidmodel = models.OneToOneField(PFRtoGuidModel)
 
-#     def save(self, *args, **kwargs):
-#         super(CareerModel, self).save(*args, **kwargs)
+    @property
+    def pfrtoguidmodel__playername(self):
+        return self.pfrtoguidmodel.player_name
 
-# ''' Season data '''
-# class SeasonModel(models.Model):
+    def __unicode__(self):
+        return self.pfrtoguidmodel.player_name
 
-#     def save(self, *args, **kwargs):
-#         super(SeasonModel, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        self.pfrtoguidmodel = PFRtoGuidModel.objects.get(pk=self.pguid)
+        super(CareerModel, self).save(*args, **kwargs)
+  
+''' Season data '''
+class SeasonModel(models.Model):
+    '''
+        passing_score = (row['Passing_TD']*4) + (row['Passing_Yds']/25) - (row['Passing_Int']*2)
+        receiving_score = (row['Receiving_TD']*6) + (row['Receiving_Yds']/10)
+        rushing_score = (row['Rushing_TD']*6) + (row['Rushing_Yds']/10)
+        misc_score = (row['Kick Returns_TD']*6)
+        misc_score = (row['Punt Returns_TD']*6)
+        Fumble Recovered for TD = 6pts
+        Each Fumble Lost = -2
+    '''
+    season_guid = models.CharField(primary_key=True, max_length=45, blank=True)
+    pguid = models.CharField(max_length=40)
+    year = models.IntegerField()
+    games_played = models.IntegerField(default=0, null=True)
+    pass_tds = models.IntegerField(default=0, null=True)
+    pass_yards = models.IntegerField(default=0, null=True)
+    ints_thrown = models.IntegerField(default=0, null=True)
+    rec_tds = models.IntegerField(default=0, null=True)
+    rec_yards = models.IntegerField(default=0, null=True)
+    rush_tds = models.IntegerField(default=0, null=True)
+    rush_yards = models.IntegerField(default=0, null=True)
+    kr_tds = models.IntegerField(default=0, null=True)
+    pr_tds = models.IntegerField(default=0, null=True)
+    fumbles_lost = models.IntegerField(default=0, null=True)
+    season_ff_pts = models.IntegerField(default=0, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.season_guid:
+            self.season_guid = self.pguid + '_' + str(self.year)
+        super(SeasonModel, self).save(*args, **kwargs)
 
 ''' Single game data ''' 
 class GameModel(models.Model):
-    pguid = models.CharField(max_length=40)#serializers.UUIDField(format='hex')
+    game_guid = models.CharField(primary_key=True, max_length=51)
+    pguid = models.CharField(max_length=40)
     year = models.IntegerField()
     game_count_played = models.IntegerField()
     game_number = models.IntegerField()
@@ -143,5 +184,7 @@ class GameModel(models.Model):
     game_ff_pts = models.IntegerField()
 
     def save(self, *args, **kwargs):
+        if not self.game_guid:
+            self.game_guid = self.pguid + '_' + str(self.date)
         super(GameModel, self).save(*args, **kwargs)
 
