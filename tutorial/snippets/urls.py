@@ -5,23 +5,18 @@
 from snippets.views import SnippetViewSet, UserViewSet, api_root, PFRtoGuidViewSet, GameViewSet, SeasonViewSet, CareerViewSet
 from rest_framework import renderers
 
-pfrguids_list = PFRtoGuidViewSet.as_view({
-	'get': 'list',
-	'post': 'create'
-})
-
-# pfrguids_detail = PFRtoGuidViewSet.as_view({
-# 	'get': 'retrieve',
-# 	'put': 'update'
+# pfrguids_list = PFRtoGuidViewSet.as_view({
+# 	'get': 'list',
+# 	'post': 'create'
 # })
 
-pfrguids_fetch_guid = PFRtoGuidViewSet.as_view({
-    'get': 'retrieve'
-})
+# pfrguids_fetch_guid = PFRtoGuidViewSet.as_view({
+#     'get': 'retrieve'
+# })
 
-pfrguids_fetch_guid_only = PFRtoGuidViewSet.as_view({
-    'get': 'retrieve_guid_only'
-})
+# pfrguids_fetch_guid_only = PFRtoGuidViewSet.as_view({
+#     'get': 'retrieve_guid_only'
+# })
 
 games_list = GameViewSet.as_view({
     'get': 'list',
@@ -75,10 +70,10 @@ urlpatterns = format_suffix_patterns([
     url(r'^users/(?P<pk>[0-9]+)/$', user_detail, name='user-detail'),
 
     # Guid routes
-    url(r'^pfrguids/$', pfrguids_list, name='pfrguids-list'),
-    # url(r'^pfrguids/(?P<pk>[0-9]+)/$', pfrguids_detail, name='pfrguids-detail')
-    url(r'^pfrguids/(?P<pk>[a-zA-z0-9_]+)/$', pfrguids_fetch_guid, name='pfrguids-fetch-guid'),
-    url(r'^pfrguids/(?P<pk>[a-zA-z0-9_]+)/guid/$', pfrguids_fetch_guid_only, name='pfrguids-fetch-guid-only'),
+    # url(r'^pfrguids/$', pfrguids_list, name='pfrguids-list'),
+    # # url(r'^pfrguids/(?P<pk>[0-9]+)/$', pfrguids_detail, name='pfrguids-detail')
+    # url(r'^pfrguids/(?P<pk>[a-zA-z0-9_]+)/$', pfrguids_fetch_guid, name='pfrguids-fetch-guid'),
+    # url(r'^pfrguids/(?P<pk>[a-zA-z0-9_]+)/guid/$', pfrguids_fetch_guid_only, name='pfrguids-fetch-guid-only'),
 
     # Game log route
     url(r'^games/$', games_list, name='games-list'),

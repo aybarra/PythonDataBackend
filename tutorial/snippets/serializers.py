@@ -22,17 +22,21 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'snippets')
 
-class PFRGuidSerializer(serializers.ModelSerializer):
+# class PFRGuidSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = PFRtoGuidModel
-        fields = ('pfr_name', 'player_name', 'pguid', 'pos_type')
+#     class Meta:
+#         model = PFRtoGuidModel
+#         fields = ('pfr_name', 'player_name', 'pguid', 'pos_type')
 
-class CareerSerializer(serializers.ModelSerializer): 
-  
+class CareerSerializer(serializers.HyperlinkedModelSerializer): #serializers.ModelSerializer):
+    
     class Meta:
         model = CareerModel
-        fields = ('pguid', 'ff_pts', 'start_year', 'end_year', 'win_pct', 'active', 'player_name')
+        fields = ('pguid', 'ff_pts', 'start_year', 'end_year', 'win_pct', 'active', 'player_name', 'pos_type')
+
+    # @receiver(post_save, sender=CareerModel)
+    # def create_pfrtoguidmodel(sender, instance, created, **kwargs):
+    #     instance.pfrtoguidmodel = get_object_or_404(PFRtoGuidModel, pk=instance.pguid)
 
 class SeasonSerializer(serializers.ModelSerializer):
 
@@ -70,3 +74,29 @@ class GameSerializer(serializers.ModelSerializer):
                   # Punting
                   # 'punts', 'punt_yards', 'yards_per_punt', 'times_punt_blocked',
                   'game_ff_pts')
+
+# class SnippetSerializer(serializers.Serializer):
+#     pk = serializers.IntegerField(read_only=True)
+#     title = serializers.CharField(required=False, allow_blank=True, max_length=100)
+#     code = serializers.CharField(style={'base_template': 'textarea.html'})
+#     linenos = serializers.BooleanField(required=False)
+#     language = serializers.ChoiceField(choices=LANGUAGE_CHOICES, default='python')
+#     style = serializers.ChoiceField(choices=STYLE_CHOICES, default='friendly')
+
+#     def create(self, validated_data):
+#         """
+#         Create and return a new `Snippet` instance, given the validated data.
+#         """
+#         return Snippet.objects.create(**validated_data)
+
+#     def update(self, instance, validated_data):
+#         """
+#         Update and return an existing `Snippet` instance, given the validated data.
+#         """
+#         instance.title = validated_data.get('title', instance.title)
+#         instance.code = validated_data.get('code', instance.code)
+#         instance.linenos = validated_data.get('linenos', instance.linenos)
+#         instance.language = validated_data.get('language', instance.language)
+#         instance.style = validated_data.get('style', instance.style)
+#         instance.save()
+#         return instance

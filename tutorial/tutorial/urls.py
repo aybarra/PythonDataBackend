@@ -22,7 +22,7 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'snippets', views.SnippetViewSet)
 router.register(r'users', views.UserViewSet)
-router.register(r'pfrguids', views.PFRtoGuidViewSet)
+# router.register(r'pfrguids', views.PFRtoGuidViewSet)
 router.register(r'careers', views.CareerViewSet)
 router.register(r'seasons', views.SeasonViewSet)
 router.register(r'games', views.GameViewSet)

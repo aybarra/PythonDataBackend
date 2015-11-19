@@ -89,18 +89,9 @@ class CareerViewSet(viewsets.ModelViewSet):
     queryset = CareerModel.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = CareerFilter
-    tempqueryset = PFRtoGuidModel.objects.all()
 
     def perform_create(self, request):
-        # serializer = PFRGuidSerializer(data=request.data['pguid'])
-        player = get_object_or_404(self.tempqueryset, pguid=request.data['pguid'])
-        # logger.debug('Value of serializer is' + str(request.data))
-        # serializer.data['password']
-        # return Response(str(serializer))
-        # player = get_object_or_404(self.tempqueryset, title=serializer.data.pguid)
-        # keywords = {'player_name': player.player_name}
-        # return Response(keywords)
-        request.save(player_name=player.player_name)
+        request.save()
 
 class SeasonViewSet(viewsets.ModelViewSet):
     serializer_class = SeasonSerializer
