@@ -28,15 +28,11 @@ class UserSerializer(serializers.ModelSerializer):
 #         model = PFRtoGuidModel
 #         fields = ('pfr_name', 'player_name', 'pguid', 'pos_type')
 
-class CareerSerializer(serializers.HyperlinkedModelSerializer): #serializers.ModelSerializer):
+class CareerSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = CareerModel
         fields = ('pguid', 'ff_pts', 'start_year', 'end_year', 'win_pct', 'active', 'player_name', 'pos_type')
-
-    # @receiver(post_save, sender=CareerModel)
-    # def create_pfrtoguidmodel(sender, instance, created, **kwargs):
-    #     instance.pfrtoguidmodel = get_object_or_404(PFRtoGuidModel, pk=instance.pguid)
 
 class SeasonSerializer(serializers.ModelSerializer):
 

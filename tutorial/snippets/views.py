@@ -1,5 +1,5 @@
 from snippets.models import Snippet, PFRtoGuidModel, GameModel, SeasonModel, CareerModel
-from snippets.serializers import SnippetSerializer, PFRGuidSerializer, GameSerializer, SeasonSerializer, CareerSerializer
+from snippets.serializers import SnippetSerializer, GameSerializer, SeasonSerializer, CareerSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
 from snippets.serializers import UserSerializer
@@ -57,24 +57,24 @@ class SnippetViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
-class PFRtoGuidViewSet(viewsets.ModelViewSet):
-    serializer_class = PFRGuidSerializer
-    queryset = PFRtoGuidModel.objects.all()
+# class PFRtoGuidViewSet(viewsets.ModelViewSet):
+#     serializer_class = PFRGuidSerializer
+#     queryset = PFRtoGuidModel.objects.all()
 
-    def perform_create(self, serializer):
-        serializer.save()
+#     def perform_create(self, serializer):
+#         serializer.save()
     
-    ''' Fetches name, pfr_name and guid '''
-    def retrieve(self, request, pk=None):
-        queryset = PFRtoGuidModel.objects.all()
-        player = get_object_or_404(queryset, pk=pk)
-        serializer = PFRGuidSerializer(player)
-        return Response(serializer.data)
+#     ''' Fetches name, pfr_name and guid '''
+#     def retrieve(self, request, pk=None):
+#         queryset = PFRtoGuidModel.objects.all()
+#         player = get_object_or_404(queryset, pk=pk)
+#         serializer = PFRGuidSerializer(player)
+#         return Response(serializer.data)
 
-    @detail_route(url_path='guid')
-    def retrieve_guid_only(self, request, *args, **kwargs):
-        player = self.get_object()
-        return Response({'pguid': player.pguid})
+#     @detail_route(url_path='guid')
+#     def retrieve_guid_only(self, request, *args, **kwargs):
+#         player = self.get_object()
+#         return Response({'pguid': player.pguid})
 
 class CareerFilter(django_filters.FilterSet):
     start_year = django_filters.NumberFilter(name="start_year", lookup_type='gte')

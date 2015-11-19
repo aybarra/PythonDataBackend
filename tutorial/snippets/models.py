@@ -72,7 +72,7 @@ class CareerModel(models.Model):
     end_year = models.IntegerField()
     win_pct = models.DecimalField(max_digits=5, decimal_places=3)
     active = models.BooleanField(default=False)
-    player_name = models.CharField(max_length=50, blank=True)
+    player_name = models.CharField(max_length=50)
     pos_type = models.CharField(choices=(('qb','qb'),('te','te'),('wr','wr'),('rb','rb')), default='ER', max_length=2)
 
     def save(self, *args, **kwargs):
