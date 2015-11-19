@@ -107,3 +107,4 @@ REST_FRAMEWORK = {
     # Determines the number of records returned per query 
     'PAGE_SIZE': 50
 }
+

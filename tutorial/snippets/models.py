@@ -72,17 +72,10 @@ class CareerModel(models.Model):
     end_year = models.IntegerField()
     win_pct = models.DecimalField(max_digits=5, decimal_places=3)
     active = models.BooleanField(default=False)
-    pfrtoguidmodel = models.OneToOneField(PFRtoGuidModel)
-
-    @property
-    def pfrtoguidmodel__playername(self):
-        return self.pfrtoguidmodel.player_name
-
-    def __unicode__(self):
-        return self.pfrtoguidmodel.player_name
+    player_name = models.CharField(max_length=50, blank=True)
 
     def save(self, *args, **kwargs):
-        self.pfrtoguidmodel = PFRtoGuidModel.objects.get(pk=self.pguid)
+        self.player_name = kwargs['player_name']
         super(CareerModel, self).save(*args, **kwargs)
   
 ''' Season data '''

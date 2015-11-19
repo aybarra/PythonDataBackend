@@ -27,24 +27,12 @@ class PFRGuidSerializer(serializers.ModelSerializer):
     class Meta:
         model = PFRtoGuidModel
         fields = ('pfr_name', 'player_name', 'pguid', 'pos_type')
-        lookup_field = 'pguid'
 
-class CareerSerializer(serializers.HyperlinkedModelSerializer): #serializers.ModelSerializer):
-    # player_name = serializers.CharField(source='careermodel.player_name')
-    player_name = serializers.HyperlinkedRelatedField(
-        view_name='pfrguidmodel-detail',
-        read_only=True,
-        lookup_field='pguid'
-    )
-
+class CareerSerializer(serializers.ModelSerializer): 
+  
     class Meta:
         model = CareerModel
         fields = ('pguid', 'ff_pts', 'start_year', 'end_year', 'win_pct', 'active', 'player_name')
-        lookup_field = 'pfrtoguidmodel__player_name'
-
-    @receiver(post_save, sender=CareerModel)
-    def create_pfrtoguidmodel(sender, instance, created, **kwargs):
-        instance.pfrtoguidmodel = get_object_or_404(PFRtoGuidModel, pk=instance.pguid)
 
 class SeasonSerializer(serializers.ModelSerializer):
 

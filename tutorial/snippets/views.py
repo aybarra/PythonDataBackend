@@ -26,6 +26,8 @@ from rest_framework import filters
 # Serializing joined tables
 from django.core import serializers
 
+# import pdb
+
 @api_view(('GET',))
 def api_root(request, format=None):
     return Response({
@@ -58,11 +60,9 @@ class SnippetViewSet(viewsets.ModelViewSet):
 class PFRtoGuidViewSet(viewsets.ModelViewSet):
     serializer_class = PFRGuidSerializer
     queryset = PFRtoGuidModel.objects.all()
-    # lookup_field = 'pguid'
 
     def perform_create(self, serializer):
         serializer.save()
-        # return Response(self.request.pguid)
     
     ''' Fetches name, pfr_name and guid '''
     def retrieve(self, request, pk=None):
@@ -71,7 +71,6 @@ class PFRtoGuidViewSet(viewsets.ModelViewSet):
         serializer = PFRGuidSerializer(player)
         return Response(serializer.data)
 
-     # @detail_route(url_path='player_name')
     @detail_route(url_path='guid')
     def retrieve_guid_only(self, request, *args, **kwargs):
         player = self.get_object()
@@ -87,17 +86,21 @@ class CareerFilter(django_filters.FilterSet):
 
 class CareerViewSet(viewsets.ModelViewSet):
     serializer_class = CareerSerializer
-    queryset = CareerModel.objects.all().select_related('pfrtoguidmodel')
+    queryset = CareerModel.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = CareerFilter
-    # lookup_field = 'pfrtoguidmodel__player_name'
+    tempqueryset = PFRtoGuidModel.objects.all()
 
-    # def list(self, request):
-    #     queryset = CareerModel.objects.all().select_related('pfrtoguidmodel')
-    #     serializer = CareerSerializer(queryset, many=True)
-    #     return Response(serializer.data)
-    def perform_create(self, serializer):
-        serializer.save()
+    def perform_create(self, request):
+        # serializer = PFRGuidSerializer(data=request.data['pguid'])
+        player = get_object_or_404(self.tempqueryset, pguid=request.data['pguid'])
+        # logger.debug('Value of serializer is' + str(request.data))
+        # serializer.data['password']
+        # return Response(str(serializer))
+        # player = get_object_or_404(self.tempqueryset, title=serializer.data.pguid)
+        # keywords = {'player_name': player.player_name}
+        # return Response(keywords)
+        request.save(player_name=player.player_name)
 
 class SeasonViewSet(viewsets.ModelViewSet):
     serializer_class = SeasonSerializer
@@ -112,29 +115,6 @@ class GameViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
-    # owner=self.request.user)
-# class SnippetHighlight(generics.GenericAPIView):
-#     queryset = Snippet.objects.all()
-#     renderer_classes = (renderers.StaticHTMLRenderer,)
-
-#     def get(self, request, *args, **kwargs):
-#         snippet = self.get_object()
-#         return Response(snippet.highlighted)
-
-# class SnippetList(generics.ListCreateAPIView):
-#     queryset = Snippet.objects.all()
-#     serializer_class = SnippetSerializer
-#     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
-#     def perform_create(self, serializer):
-#     	serializer.save(owner=self.request.user)
-
-
-# class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Snippet.objects.all()
-#     serializer_class = SnippetSerializer
-#     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-#                       IsOwnerOrReadOnly,)
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
