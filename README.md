@@ -20,7 +20,7 @@ More details about the process can be found here:
  $ pip install djangorestframework
  ```
 
-4. To run the server AFTER setting up dependencies:
+4. To run the server AFTER setting up dependencies, switch to the tutorial directory:
  ```sh
  $ python manage.py runserver
  ``` 
