@@ -5,19 +5,6 @@
 from snippets.views import SnippetViewSet, UserViewSet, api_root, PFRtoGuidViewSet, GameViewSet, SeasonViewSet, CareerViewSet
 from rest_framework import renderers
 
-# pfrguids_list = PFRtoGuidViewSet.as_view({
-# 	'get': 'list',
-# 	'post': 'create'
-# })
-
-# pfrguids_fetch_guid = PFRtoGuidViewSet.as_view({
-#     'get': 'retrieve'
-# })
-
-# pfrguids_fetch_guid_only = PFRtoGuidViewSet.as_view({
-#     'get': 'retrieve_guid_only'
-# })
-
 games_list = GameViewSet.as_view({
     'get': 'list',
     'post': 'create'
@@ -30,6 +17,10 @@ games_detail = GameViewSet.as_view({
 seasons_list = SeasonViewSet.as_view({
     'get':'list'
     'post': 'create'
+})
+
+seasons_pupdate = SeasonViewSet.as_view({
+    'put': 'partial_update'
 })
 
 careers_list = CareerViewSet.as_view({
@@ -85,6 +76,7 @@ urlpatterns = format_suffix_patterns([
 
     # Season route
     url(r'^seasons/$', seasons_list, name='seasons-list'),
+    url(r'^seasons/(?P<pk>[a-zA-z0-9]+)/$', seasons_pupdate, name='seasons-pupdate'),
 
     # Career route
     url(r'^careers/$', careers_list, name='careers-list'),

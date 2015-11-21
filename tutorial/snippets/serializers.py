@@ -39,9 +39,9 @@ class SeasonSerializer(serializers.ModelSerializer):
     class Meta:
         model = SeasonModel
         fields = ('season_guid', 'pguid', 'year', 'games_played', 
-            'pass_tds', 'pass_yards', 'ints_thrown', 'rec_tds',
-            'rec_yards', 'rush_tds', 'rush_yards', 'kr_tds', 'pr_tds',
-            'fumbles_lost', 'season_ff_pts')
+                  'pass_tds', 'pass_yards', 'ints_thrown', 'rec_tds',
+                  'rec_yards', 'rush_tds', 'rush_yards', 'kr_tds', 'pr_tds',
+                  'fumbles_lost', 'season_ff_pts')
 
 class GameSerializer(serializers.ModelSerializer):
     class Meta:

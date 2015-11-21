@@ -99,18 +99,17 @@ class CareerViewSet(viewsets.ModelViewSet):
 
     # def partial_update(self, request, pk=None)
 
-
 class SeasonViewSet(viewsets.ModelViewSet):
     serializer_class = SeasonSerializer
     queryset = SeasonModel.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
 
-    def perform_create(self, request):
-        if SeasonModel.objects.filter(pguid=request.POST['pguid'], year=request.POST['year']).exists():
+    def perform_create(self, serializer):
+        if SeasonModel.objects.filter(pguid=serializer.POST['pguid'], year=int(serializer.POST['year'])).exists():
             content = {'error_creating_season': 'season with pguid and year already exists'}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
         else:
-            request.save()
+            serializer.save()
 
 class GameViewSet(viewsets.ModelViewSet):
     serializer_class = GameSerializer

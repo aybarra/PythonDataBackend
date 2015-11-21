@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'snippets',
+    'corsheaders',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -50,6 +51,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 )
 
 ROOT_URLCONF = 'tutorial.urls'
@@ -107,4 +110,6 @@ REST_FRAMEWORK = {
     # Determines the number of records returned per query 
     'PAGE_SIZE': 50
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
 
