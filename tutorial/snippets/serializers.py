@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES, PFRtoGuidModel, GameModel, SeasonModel, CareerModel
+from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES, PFRtoGuidModel, GameModel, SeasonModel, CareerModel, SeasonAverageModel
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -70,6 +70,11 @@ class GameSerializer(serializers.ModelSerializer):
                   # Punting
                   # 'punts', 'punt_yards', 'yards_per_punt', 'times_punt_blocked',
                   'game_ff_pts')
+
+class SeasonAverageSerializer(serializers.ModelSerializer):
+    class Meta:
+      model = SeasonAverageModel
+      fields = ('year', 'ff_pt_average')
 
 # class SnippetSerializer(serializers.Serializer):
 #     pk = serializers.IntegerField(read_only=True)

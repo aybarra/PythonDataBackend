@@ -23,6 +23,14 @@ seasons_pupdate = SeasonViewSet.as_view({
     'put': 'partial_update'
 })
 
+season_average = SeasonAverageViewSet.as_view({
+    'get': 'list'
+})
+
+season_average_update = SeasonAverageViewSet.as_view({
+    'put': 'update'
+})
+
 careers_list = CareerViewSet.as_view({
     'get':'list'
     'post': 'create'
@@ -81,6 +89,10 @@ urlpatterns = format_suffix_patterns([
     # Career route
     url(r'^careers/$', careers_list, name='careers-list'),
     url(r'^careers/(?P<pk>[a-zA-z0-9]+)/$', careers_pupdate, name='careers-pupdate'),
+
+    # Season ff_pt averages
+    url(r'^season-ffpt-averages/$', season_average, name=season-average),
+    url(r'^season-ffpt-averages/(?P<pk>[0-9]+)/$', season_average_update, name=season-average-update),
 ])
 
 # # API endpoints

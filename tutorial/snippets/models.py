@@ -181,3 +181,9 @@ class GameModel(models.Model):
             self.game_guid = self.pguid + '_' + str(self.date)
         super(GameModel, self).save(*args, **kwargs)
 
+class SeasonAverageModel(models.Model):
+    year = models.IntegerField(primary_key=True)
+    ff_pt_average = models.IntegerField()
+
+    def save(self, *args, **kwargs):
+        super(SeasonAverageModel, self).save(*args, **kwargs)

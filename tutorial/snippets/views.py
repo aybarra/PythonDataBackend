@@ -1,5 +1,5 @@
 from snippets.models import Snippet, PFRtoGuidModel, GameModel, SeasonModel, CareerModel
-from snippets.serializers import SnippetSerializer, GameSerializer, SeasonSerializer, CareerSerializer
+from snippets.serializers import SnippetSerializer, GameSerializer, SeasonSerializer, CareerSerializer, SeasonAverageSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
 from snippets.serializers import UserSerializer
@@ -122,6 +122,13 @@ class GameViewSet(viewsets.ModelViewSet):
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
         else:
             serializer.save()
+
+class SeasonAverageViewSet(viewsets.ModelViewSet):
+    serializer_class = SeasonAverageSerializer
+    queryset = SeasonAverage.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
