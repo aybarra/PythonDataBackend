@@ -18,6 +18,8 @@ More details about the process can be found here:
  ```sh
  $ pip install django
  $ pip install djangorestframework
+ $ pip install pygments
+ $ pip install django-filter
  ```
 
 4. To run the server AFTER setting up dependencies, switch to the tutorial directory:
