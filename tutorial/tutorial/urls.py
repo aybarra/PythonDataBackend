@@ -26,7 +26,7 @@ router.register(r'users', views.UserViewSet)
 router.register(r'careers', views.CareerViewSet)
 router.register(r'seasons', views.SeasonViewSet)
 router.register(r'games', views.GameViewSet)
-router.register(r'season-ffpt-averages', views.SeasonAverageViewset)
+router.register(r'season-ffpt-averages', views.SeasonAverageViewSet)
 
 # The API URLs are now determined automatically by the router.
 # Additionally, we include the login URLs for the browsable API.

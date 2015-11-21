@@ -2,7 +2,7 @@
 # from rest_framework.urlpatterns import format_suffix_patterns
 # from snippets import views
 
-from snippets.views import SnippetViewSet, UserViewSet, api_root, PFRtoGuidViewSet, GameViewSet, SeasonViewSet, CareerViewSet
+from snippets.views import SnippetViewSet, UserViewSet, api_root, PFRtoGuidViewSet, GameViewSet, SeasonViewSet, CareerViewSet, SeasonAverageViewSet
 from rest_framework import renderers
 
 games_list = GameViewSet.as_view({

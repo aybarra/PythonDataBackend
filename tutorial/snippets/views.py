@@ -1,4 +1,4 @@
-from snippets.models import Snippet, PFRtoGuidModel, GameModel, SeasonModel, CareerModel
+from snippets.models import Snippet, PFRtoGuidModel, GameModel, SeasonModel, CareerModel, SeasonAverageModel
 from snippets.serializers import SnippetSerializer, GameSerializer, SeasonSerializer, CareerSerializer, SeasonAverageSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
@@ -125,7 +125,7 @@ class GameViewSet(viewsets.ModelViewSet):
 
 class SeasonAverageViewSet(viewsets.ModelViewSet):
     serializer_class = SeasonAverageSerializer
-    queryset = SeasonAverage.objects.all()
+    queryset = SeasonAverageModel.objects.all()
 
     def perform_create(self, serializer):
         serializer.save()
