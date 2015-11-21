@@ -8,8 +8,9 @@ Server for fetching and inputting football records written using Django
  ```sh
  $ cd <my_project_folder>
  $ virtualenv venv
- $ source activate venv
+ $ source activate venv #If this doesn't work try 'source venv/bin/activate'
  ```
+ 
 More details about the process can be found here:
 > http://docs.python-guide.org/en/latest/dev/virtualenvs/
 
