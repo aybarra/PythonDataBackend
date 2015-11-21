@@ -7,8 +7,8 @@ Server for fetching and inputting football records written using Django
 2. You will preferably want a virtual python environment (in case you have other python projects that have other dependencies):
  ```sh
  $ cd <my_project_folder>
- $ virtualenv venv
- $ source activate venv #If this doesn't work on mac try 'source venv/bin/activate' on windows...you're SOL
+ $ virtualenv venv #windows: mkvirtualenv venv
+ $ source activate venv #If this doesn't work on mac try 'source venv/bin/activate' on windows...you're SOL. Windows: workon venv
  ```
  
 More details about the process can be found here:
