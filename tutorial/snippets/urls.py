@@ -37,6 +37,10 @@ careers_list = CareerViewSet.as_view({
     'post': 'create'
 })
 
+careers_pupdate = CareerViewSet.as_view({
+    'put': 'partial_update'
+})
+
 snippet_list = SnippetViewSet.as_view({
     'get': 'list',
     'post': 'create'
@@ -84,6 +88,7 @@ urlpatterns = format_suffix_patterns([
 
     # Career route
     url(r'^careers/$', careers_list, name='careers-list'),
+    url(r'^careers/(?P<pk>[a-zA-z0-9]+)/$', careers_pupdate, name='careers-pupdate'),
 ])
 
 # # API endpoints
