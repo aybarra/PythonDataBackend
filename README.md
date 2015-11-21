@@ -20,6 +20,7 @@ More details about the process can be found here:
  $ pip install djangorestframework
  $ pip install pygments
  $ pip install django-filter
+ $ pip install django-cors-headers
  ```
 
 4. To run the server AFTER setting up dependencies, switch to the tutorial directory:
