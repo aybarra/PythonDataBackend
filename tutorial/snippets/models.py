@@ -112,7 +112,7 @@ class SeasonModel(models.Model):
 
 ''' Single game data ''' 
 class GameModel(models.Model):
-    game_guid = models.CharField(primary_key=True, max_length=51)
+    game_guid = models.CharField(primary_key=True, max_length=51, blank=True)
     pguid = models.CharField(max_length=40)
     year = models.IntegerField()
     game_count_played = models.IntegerField()

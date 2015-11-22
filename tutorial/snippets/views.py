@@ -78,11 +78,13 @@ class SnippetViewSet(viewsets.ModelViewSet):
 
 class CareerFilter(django_filters.FilterSet):
     start_year = django_filters.NumberFilter(name="start_year", lookup_type='gte')
-    ff_pts = django_filters.NumberFilter(name="ff_pts", lookup_type='gte')
+    min_pts = django_filters.NumberFilter(name="ff_pts", lookup_type='gte')
+    max_pts = django_filters.NumberFilter(name="ff_pts", lookup_type='lt')
+    active = django_filters.BooleanFilter(name="active")
 
     class Meta:
         model = CareerModel
-        fields = ['start_year', 'ff_pts']
+        fields = ['start_year', 'min_pts', 'max_pts', 'active']
 
 class CareerViewSet(viewsets.ModelViewSet):
     serializer_class = CareerSerializer
@@ -91,25 +93,36 @@ class CareerViewSet(viewsets.ModelViewSet):
     filter_class = CareerFilter
 
     def perform_create(self, request):
-        if CareerModel.objects.filter(pguid=request.POST['pguid']).exists():
-            content = {'error_creating_career': 'career with specified pguid already exists'}
-            return Response(content, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            request.save()
+        # if CareerModel.objects.filter(pguid=request.POST['pguid']).exists():
+        #     content = {'error_creating_career': 'career with specified pguid already exists'}
+        #     return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        # else:
+        request.save()
 
     # def partial_update(self, request, pk=None)
+
+# class SeasonFilter(django_filters.FilterSet):
+#     starts_with = django_filters.CharFilter(name='season_guid')
+#     # start_year = django_filters.NumberFilter(name="start_year", lookup_type='gte')
+#     # min_pts = django_filters.NumberFilter(name="ff_pts", lookup_type='gte')
+#     # max_pts = django_filters.NumberFilter(name="ff_pts", lookup_type='lt')
+    
+#     class Meta:
+#         model = SeasonModel
+#         fields = ['start_year', 'min_pts', 'max_pts']
 
 class SeasonViewSet(viewsets.ModelViewSet):
     serializer_class = SeasonSerializer
     queryset = SeasonModel.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
+    # filter_class = SeasonFilter
 
     def perform_create(self, serializer):
-        if SeasonModel.objects.filter(pguid=serializer.POST['pguid'], year=int(serializer.POST['year'])).exists():
-            content = {'error_creating_season': 'season with pguid and year already exists'}
-            return Response(content, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            serializer.save()
+        # if SeasonModel.objects.filter(pguid=serializer.POST['pguid'], year=int(serializer.POST['year'])).exists():
+        #     content = {'error_creating_season': 'season with pguid and year already exists'}
+        #     return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        # else:
+        serializer.save()
 
 class GameViewSet(viewsets.ModelViewSet):
     serializer_class = GameSerializer
@@ -117,11 +130,11 @@ class GameViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
 
     def perform_create(self, serializer):
-        if GameModel.objects.filter(pguid=serializer.POST['pguid'], date=serializer.POST['date']).exists():
-            content = {'error_creating_game': 'game with pguid and date already exists'}
-            return Response(content, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            serializer.save()
+        # if GameModel.objects.filter(pguid=serializer.POST['pguid'], date=serializer.POST['date']).exists():
+        #     content = {'error_creating_game': 'game with pguid and date already exists'}
+        #     return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        # else:
+        serializer.save()
 
 class SeasonAverageViewSet(viewsets.ModelViewSet):
     serializer_class = SeasonAverageSerializer
