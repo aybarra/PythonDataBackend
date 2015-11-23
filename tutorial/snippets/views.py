@@ -82,9 +82,11 @@ class CareerFilter(django_filters.FilterSet):
     max_pts = django_filters.NumberFilter(name="ff_pts", lookup_type='lt')
     active = django_filters.BooleanFilter(name="active")
 
+    choices = (('qb', 'QB'), ('wr', 'WR'), ('rb', 'RB'), ('te', 'TE'),)
+    pos = django_filters.MultipleChoiceFilter(name="pos_type", choices=choices)
     class Meta:
         model = CareerModel
-        fields = ['start_year', 'min_pts', 'max_pts', 'active']
+        fields = ['start_year', 'min_pts', 'max_pts', 'active', 'pos']
 
 class CareerViewSet(viewsets.ModelViewSet):
     serializer_class = CareerSerializer
