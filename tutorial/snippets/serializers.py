@@ -71,6 +71,17 @@ class GameSerializer(serializers.ModelSerializer):
                   # 'punts', 'punt_yards', 'yards_per_punt', 'times_punt_blocked',
                   'game_ff_pts')
 
+
+class GameSubsetSerializer(serializers.ModelSerializer):
+    class Meta:
+      model = GameModel
+      fields = ('game_guid', 'game_ff_pts')
+
+class SeasonSubsetSerializer(serializers.ModelSerializer):
+    class Meta:
+      model = SeasonModel
+      fields = ('season_guid', 'season_ff_pts')
+      
 class SeasonAverageSerializer(serializers.ModelSerializer):
     class Meta:
       model = SeasonAverageModel

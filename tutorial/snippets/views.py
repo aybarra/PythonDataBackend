@@ -1,5 +1,5 @@
 from snippets.models import Snippet, PFRtoGuidModel, GameModel, SeasonModel, CareerModel, SeasonAverageModel
-from snippets.serializers import SnippetSerializer, GameSerializer, SeasonSerializer, CareerSerializer, SeasonAverageSerializer
+from snippets.serializers import SnippetSerializer, GameSerializer, GameSubsetSerializer, SeasonSerializer, SeasonSubsetSerializer, CareerSerializer, SeasonAverageSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
 from snippets.serializers import UserSerializer
@@ -15,7 +15,7 @@ from rest_framework import renderers
 
 # Part VI
 from rest_framework import viewsets
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import detail_route, list_route
 
 from django.shortcuts import get_object_or_404
 
@@ -104,6 +104,28 @@ class CareerViewSet(viewsets.ModelViewSet):
 
     # def partial_update(self, request, pk=None)
 
+
+class SeasonSubsetFilter(django_filters.FilterSet):
+    starts_with = django_filters.CharFilter(name='season_guid', lookup_type='icontains')
+    min_pts = django_filters.NumberFilter(name="season_ff_pts", lookup_type='gte')
+    max_pts = django_filters.NumberFilter(name="season_ff_pts", lookup_type='lt')
+
+    class Meta:
+        model = SeasonModel
+        fields = ['starts_with', 'min_pts', 'max_pts']
+
+class SeasonViewSetSubset(viewsets.ModelViewSet):
+    serializer_class = SeasonSubsetSerializer
+    queryset = SeasonModel.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class=SeasonSubsetFilter
+
+    @list_route()
+    def fetch_subset(self, request):
+        recent_users = SeasonModel.objects.all().only('season_guid', 'season_ff_pts')
+        serializer = self.get_serializer(recent_users, many=True)
+        return Response(serializer.data)
+
 class SeasonFilter(django_filters.FilterSet):
     starts_with = django_filters.CharFilter(name='season_guid', lookup_type='icontains')
     
@@ -143,6 +165,28 @@ class GameViewSet(viewsets.ModelViewSet):
         #     return Response(content, status=status.HTTP_400_BAD_REQUEST)
         # else:
         serializer.save()
+
+class GameSubsetFilter(django_filters.FilterSet):
+    starts_with = django_filters.CharFilter(name='game_guid', lookup_type='icontains')
+    min_pts = django_filters.NumberFilter(name="game_ff_pts", lookup_type='gte')
+    max_pts = django_filters.NumberFilter(name="game_ff_pts", lookup_type='lt')
+
+    class Meta:
+        model = GameModel
+        fields = ['starts_with', 'min_pts', 'max_pts']
+
+class GameViewSetSubset(viewsets.ModelViewSet):
+    serializer_class = GameSubsetSerializer
+    queryset = GameModel.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class=GameSubsetFilter
+
+    @list_route()
+    def fetch_subset(self, request):
+        recent_users = GameModel.objects.all().only('game_guid', 'game_ff_pts')
+        serializer = self.get_serializer(recent_users, many=True)
+        return Response(serializer.data)
+
 
 class SeasonAverageViewSet(viewsets.ModelViewSet):
     serializer_class = SeasonAverageSerializer

@@ -2,12 +2,17 @@
 # from rest_framework.urlpatterns import format_suffix_patterns
 # from snippets import views
 
-from snippets.views import SnippetViewSet, UserViewSet, api_root, PFRtoGuidViewSet, GameViewSet, SeasonViewSet, CareerViewSet, SeasonAverageViewSet
+from snippets.views import SnippetViewSet, UserViewSet, api_root, PFRtoGuidViewSet, GameViewSet, GameViewSetSubset, SeasonViewSet, SeasonViewSetSubset, CareerViewSet, SeasonAverageViewSet
 from rest_framework import renderers
+
 
 games_list = GameViewSet.as_view({
     'get': 'list',
     'post': 'create'
+})
+
+games_list_subset = GameViewSetSubset.as_view({
+    'get': 'list'
 })
 
 games_detail = GameViewSet.as_view({
@@ -17,6 +22,10 @@ games_detail = GameViewSet.as_view({
 seasons_list = SeasonViewSet.as_view({
     'get':'list'
     'post': 'create'
+})
+
+seasons_list_subset = SeasonViewSetSubset.as_view({
+    'get': 'list'
 })
 
 seasons_pupdate = SeasonViewSet.as_view({
@@ -81,10 +90,16 @@ urlpatterns = format_suffix_patterns([
     # Game log route
     url(r'^games/$', games_list, name='games-list'),
     url(r'^games/(?P<pk>[a-zA-z0-9]+)/$', games_detail, name='games-detail'),
+    
+    # Game subset route
+    url(r'^games_subset/$', games_list_subset, name='games-list-subset'),
 
     # Season route
     url(r'^seasons/$', seasons_list, name='seasons-list'),
     url(r'^seasons/(?P<pk>[a-zA-z0-9]+)/$', seasons_pupdate, name='seasons-pupdate'),
+
+    # Season subset route
+    url(r'^seasons_subset/$', seasons_list_subset, name='seasons-list-subset'),
 
     # Career route
     url(r'^careers/$', careers_list, name='careers-list'),
