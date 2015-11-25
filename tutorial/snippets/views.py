@@ -78,6 +78,7 @@ class SnippetViewSet(viewsets.ModelViewSet):
 
 class CareerFilter(django_filters.FilterSet):
     start_year = django_filters.NumberFilter(name="start_year", lookup_type='gte')
+    start_year_end = django_filters.NumberFilter(name="start_year", lookup_type='lt')
     min_pts = django_filters.NumberFilter(name="ff_pts", lookup_type='gte')
     max_pts = django_filters.NumberFilter(name="ff_pts", lookup_type='lt')
     active = django_filters.BooleanFilter(name="active")
@@ -86,7 +87,7 @@ class CareerFilter(django_filters.FilterSet):
     pos = django_filters.MultipleChoiceFilter(name="pos_type", choices=choices)
     class Meta:
         model = CareerModel
-        fields = ['start_year', 'min_pts', 'max_pts', 'active', 'pos']
+        fields = ['start_year', 'start_year_end', 'min_pts', 'max_pts', 'active', 'pos']
 
 class CareerViewSet(viewsets.ModelViewSet):
     serializer_class = CareerSerializer
@@ -103,21 +104,18 @@ class CareerViewSet(viewsets.ModelViewSet):
 
     # def partial_update(self, request, pk=None)
 
-# class SeasonFilter(django_filters.FilterSet):
-#     starts_with = django_filters.CharFilter(name='season_guid')
-#     # start_year = django_filters.NumberFilter(name="start_year", lookup_type='gte')
-#     # min_pts = django_filters.NumberFilter(name="ff_pts", lookup_type='gte')
-#     # max_pts = django_filters.NumberFilter(name="ff_pts", lookup_type='lt')
+class SeasonFilter(django_filters.FilterSet):
+    starts_with = django_filters.CharFilter(name='season_guid', lookup_type='icontains')
     
-#     class Meta:
-#         model = SeasonModel
-#         fields = ['start_year', 'min_pts', 'max_pts']
+    class Meta:
+        model = SeasonModel
+        fields = ['starts_with']
 
 class SeasonViewSet(viewsets.ModelViewSet):
     serializer_class = SeasonSerializer
     queryset = SeasonModel.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
-    # filter_class = SeasonFilter
+    filter_class = SeasonFilter
 
     def perform_create(self, serializer):
         # if SeasonModel.objects.filter(pguid=serializer.POST['pguid'], year=int(serializer.POST['year'])).exists():
@@ -126,10 +124,18 @@ class SeasonViewSet(viewsets.ModelViewSet):
         # else:
         serializer.save()
 
+class GameFilter(django_filters.FilterSet):
+    starts_with = django_filters.CharFilter(name='game_guid', lookup_type='icontains')
+    
+    class Meta:
+        model = GameModel
+        fields = ['starts_with']
+
 class GameViewSet(viewsets.ModelViewSet):
     serializer_class = GameSerializer
     queryset = GameModel.objects.all() 
     filter_backends = (filters.DjangoFilterBackend,)
+    filter_class=GameFilter
 
     def perform_create(self, serializer):
         # if GameModel.objects.filter(pguid=serializer.POST['pguid'], date=serializer.POST['date']).exists():

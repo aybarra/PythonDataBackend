@@ -187,3 +187,4 @@ class SeasonAverageModel(models.Model):
 
     def save(self, *args, **kwargs):
         super(SeasonAverageModel, self).save(*args, **kwargs)
+
