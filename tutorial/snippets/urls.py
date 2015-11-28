@@ -16,7 +16,7 @@ games_list_subset = GameViewSetSubset.as_view({
 })
 
 games_detail = GameViewSet.as_view({
-    'delete': 'destroy'
+    'delete': 'destroy',
 })
 
 seasons_list = SeasonViewSet.as_view({
@@ -29,7 +29,8 @@ seasons_list_subset = SeasonViewSetSubset.as_view({
 })
 
 seasons_pupdate = SeasonViewSet.as_view({
-    'put': 'partial_update'
+    'put': 'update',
+    'patch': 'partial_update'
 })
 
 season_average = SeasonAverageViewSet.as_view({
@@ -41,12 +42,14 @@ season_average_update = SeasonAverageViewSet.as_view({
 })
 
 careers_list = CareerViewSet.as_view({
-    'get':'list'
+    'get':'list',
     'post': 'create'
 })
 
 careers_pupdate = CareerViewSet.as_view({
-    'put': 'partial_update'
+    'patch': 'partial_update',
+    'get': 'retrieve'
+
 })
 
 snippet_list = SnippetViewSet.as_view({
@@ -104,46 +107,10 @@ urlpatterns = format_suffix_patterns([
     # Career route
     url(r'^careers/$', careers_list, name='careers-list'),
     url(r'^careers/(?P<pk>[a-zA-z0-9]+)/$', careers_pupdate, name='careers-pupdate'),
+    # url(r'^careers/"([a-zA-Z]+[0-9]+|[a-zA-Z]+\.[0-9]+)"', careers_pupdate, name='careers-pupdate'),
+
 
     # Season ff_pt averages
     url(r'^season-ffpt-averages/$', season_average, name=season-average),
     url(r'^season-ffpt-averages/(?P<pk>[0-9]+)/$', season_average_update, name=season-average-update),
 ])
-
-# # API endpoints
-# urlpatterns = format_suffix_patterns([
-#     url(r'^$', views.api_root),
-#     url(r'^snippets/$',
-#         views.SnippetList.as_view(),
-#         name='snippet-list'),
-#     url(r'^snippets/(?P<pk>[0-9]+)/$',
-#         views.SnippetDetail.as_view(),
-#         name='snippet-detail'),
-#     url(r'^snippets/(?P<pk>[0-9]+)/highlight/$',
-#         views.SnippetHighlight.as_view(),
-#         name='snippet-highlight'),
-#     url(r'^users/$',
-#         views.UserList.as_view(),
-#         name='user-list'),
-#     url(r'^users/(?P<pk>[0-9]+)/$',
-#         views.UserDetail.as_view(),
-#         name='user-detail')
-# ])
-
-# # Login and logout views for the browsable API
-# urlpatterns += [
-#     url(r'^api-auth/', include('rest_framework.urls',
-#                                namespace='rest_framework')),
-# ]
-
-
-# from django.conf.urls import url
-# from rest_framework.urlpatterns import format_suffix_patterns
-# from snippets import views
-
-# urlpatterns = [
-#     url(r'^snippets/$', views.snippet_list),
-#     url(r'^snippets/(?P<pk>[0-9]+)$', views.snippet_detail),
-# ]
-
-# urlpatterns = format_suffix_patterns(urlpatterns)

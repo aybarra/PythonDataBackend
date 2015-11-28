@@ -81,7 +81,7 @@ class SeasonSubsetSerializer(serializers.ModelSerializer):
     class Meta:
       model = SeasonModel
       fields = ('season_guid', 'season_ff_pts')
-      
+
 class SeasonAverageSerializer(serializers.ModelSerializer):
     class Meta:
       model = SeasonAverageModel

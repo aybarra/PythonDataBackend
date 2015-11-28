@@ -26,8 +26,6 @@ from rest_framework import filters
 # Serializing joined tables
 from django.core import serializers
 
-# import pdb
-
 @api_view(('GET',))
 def api_root(request, format=None):
     return Response({
@@ -102,8 +100,14 @@ class CareerViewSet(viewsets.ModelViewSet):
         # else:
         request.save()
 
-    # def partial_update(self, request, pk=None)
-
+    @detail_route(methods=['patch'])
+    def update_ff_pts(self, request):
+        # ff_pts = request['ff_pts']
+        # player = get_object_or_404(CareerModel, pk=pk)
+        # player['ff_pts'] = ff_pts
+        # player.save()
+        serializer = CareerSerializer(CareerModel, data=request.data, partial=True)
+        return Response(serializer.data)
 
 class SeasonSubsetFilter(django_filters.FilterSet):
     starts_with = django_filters.CharFilter(name='season_guid', lookup_type='icontains')
@@ -115,6 +119,7 @@ class SeasonSubsetFilter(django_filters.FilterSet):
         fields = ['starts_with', 'min_pts', 'max_pts']
 
 class SeasonViewSetSubset(viewsets.ModelViewSet):
+    # lookup_value_regex = '[0-9.]+' 
     serializer_class = SeasonSubsetSerializer
     queryset = SeasonModel.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
