@@ -34,6 +34,7 @@ router.register(r'seasons_subset', views.SeasonViewSetSubset)
 # Additionally, we include the login URLs for the browsable API.
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url(r'^docs/', include('rest_framework_swagger.urls')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 

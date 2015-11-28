@@ -21,6 +21,7 @@ Server for fetching and inputting football records written using Django
      $ pip install pygments
      $ pip install django-filter
      $ pip install django-cors-headers
+     $ pip install django-rest-swagger
      ```
 
 4. To run the server AFTER setting up dependencies, switch to the tutorial directory:

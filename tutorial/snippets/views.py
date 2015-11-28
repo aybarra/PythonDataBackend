@@ -102,10 +102,6 @@ class CareerViewSet(viewsets.ModelViewSet):
 
     @detail_route(methods=['patch'])
     def update_ff_pts(self, request):
-        # ff_pts = request['ff_pts']
-        # player = get_object_or_404(CareerModel, pk=pk)
-        # player['ff_pts'] = ff_pts
-        # player.save()
         serializer = CareerSerializer(CareerModel, data=request.data, partial=True)
         return Response(serializer.data)
 
