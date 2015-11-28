@@ -109,7 +109,7 @@ STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
     # Determines the number of records returned per query 
-    'PAGE_SIZE': 50
+    'PAGE_SIZE': 1000
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
