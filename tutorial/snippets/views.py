@@ -83,9 +83,11 @@ class CareerFilter(django_filters.FilterSet):
 
     choices = (('qb', 'QB'), ('wr', 'WR'), ('rb', 'RB'), ('te', 'TE'),)
     pos = django_filters.MultipleChoiceFilter(name="pos_type", choices=choices)
+    starts_with = django_filters.CharFilter(name='player_name', lookup_type='icontains')
+
     class Meta:
         model = CareerModel
-        fields = ['start_year', 'start_year_end', 'min_pts', 'max_pts', 'active', 'pos']
+        fields = ['start_year', 'start_year_end', 'min_pts', 'max_pts', 'active', 'pos', 'starts_with']
 
 class CareerViewSet(viewsets.ModelViewSet):
     serializer_class = CareerSerializer
