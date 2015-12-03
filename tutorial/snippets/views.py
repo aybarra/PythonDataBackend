@@ -88,6 +88,7 @@ class CareerFilter(django_filters.FilterSet):
     class Meta:
         model = CareerModel
         fields = ['start_year', 'start_year_end', 'min_pts', 'max_pts', 'active', 'pos', 'starts_with']
+        order_by = ['-ff_pts']  # Descending by ff_pts
 
 class CareerViewSet(viewsets.ModelViewSet):
     serializer_class = CareerSerializer
@@ -111,10 +112,19 @@ class SeasonSubsetFilter(django_filters.FilterSet):
     starts_with = django_filters.CharFilter(name='season_guid', lookup_type='icontains')
     min_pts = django_filters.NumberFilter(name="season_ff_pts", lookup_type='gte')
     max_pts = django_filters.NumberFilter(name="season_ff_pts", lookup_type='lt')
+    
+    players = django_filters.MethodFilter(action='filter_pguids')
 
     class Meta:
         model = SeasonModel
-        fields = ['starts_with', 'min_pts', 'max_pts']
+        fields = ['starts_with', 'min_pts', 'max_pts', 'players']
+
+    def filter_pguids(self, queryset, value):
+        # pk__in=[1,4,7]
+        pguids = value.split(',')
+        return queryset.filter(
+            pguid__in=pguids
+        )
 
 class SeasonViewSetSubset(viewsets.ModelViewSet):
     # lookup_value_regex = '[0-9.]+' 
@@ -131,10 +141,18 @@ class SeasonViewSetSubset(viewsets.ModelViewSet):
 
 class SeasonFilter(django_filters.FilterSet):
     starts_with = django_filters.CharFilter(name='season_guid', lookup_type='icontains')
-    
+    players = django_filters.MethodFilter(action='filter_pguids')
+
     class Meta:
         model = SeasonModel
-        fields = ['starts_with']
+        fields = ['starts_with', 'players']
+
+    def filter_pguids(self, queryset, value):
+        # pk__in=[1,4,7]
+        pguids = value.split(',')
+        return queryset.filter(
+            pguid__in=pguids
+        )
 
 class SeasonViewSet(viewsets.ModelViewSet):
     serializer_class = SeasonSerializer

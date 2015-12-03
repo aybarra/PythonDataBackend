@@ -74,7 +74,7 @@ class CareerModel(models.Model):
     active = models.BooleanField(default=False)
     player_name = models.CharField(max_length=50)
     pos_type = models.CharField(choices=(('qb','qb'),('te','te'),('wr','wr'),('rb','rb')), default='ER', max_length=2)
-
+    
     def save(self, *args, **kwargs):
         super(CareerModel, self).save(*args, **kwargs)
   
