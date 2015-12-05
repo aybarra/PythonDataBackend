@@ -83,7 +83,7 @@ class CareerFilter(django_filters.FilterSet):
 
     choices = (('qb', 'QB'), ('wr', 'WR'), ('rb', 'RB'), ('te', 'TE'),)
     pos = django_filters.MultipleChoiceFilter(name="pos_type", choices=choices)
-    
+
     starts_with = django_filters.CharFilter(name='player_name', lookup_type='icontains')
 
     class Meta:
@@ -133,6 +133,7 @@ class SeasonViewSetSubset(viewsets.ModelViewSet):
     queryset = SeasonModel.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class=SeasonSubsetFilter
+    paginate_by = 2000
 
     @list_route()
     def fetch_subset(self, request):

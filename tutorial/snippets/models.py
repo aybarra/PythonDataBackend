@@ -74,7 +74,7 @@ class CareerModel(models.Model):
     active = models.BooleanField(default=False)
     player_name = models.CharField(max_length=50)
     pos_type = models.CharField(choices=(('qb','qb'),('te','te'),('wr','wr'),('rb','rb')), default='ER', max_length=2)
-    
+
     def save(self, *args, **kwargs):
         super(CareerModel, self).save(*args, **kwargs)
   
@@ -92,7 +92,7 @@ class SeasonModel(models.Model):
     season_guid = models.CharField(primary_key=True, max_length=45, blank=True)
     pguid = models.CharField(max_length=40)
     year = models.IntegerField()
-    games_played = models.IntegerField(default=0, null=True)
+    games_played = models.IntegerField(default=0)
     pass_tds = models.IntegerField(default=0, null=True)
     pass_yards = models.IntegerField(default=0, null=True)
     ints_thrown = models.IntegerField(default=0, null=True)
@@ -103,7 +103,7 @@ class SeasonModel(models.Model):
     kr_tds = models.IntegerField(default=0, null=True)
     pr_tds = models.IntegerField(default=0, null=True)
     fumbles_lost = models.IntegerField(default=0, null=True)
-    season_ff_pts = models.IntegerField(default=0, null=True)
+    season_ff_pts = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
         if not self.season_guid:
