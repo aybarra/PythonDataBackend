@@ -96,6 +96,7 @@ class CareerViewSet(viewsets.ModelViewSet):
     queryset = CareerModel.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = CareerFilter
+    paginate_by = 6000
 
     def perform_create(self, request):
         # if CareerModel.objects.filter(pguid=request.POST['pguid']).exists():
