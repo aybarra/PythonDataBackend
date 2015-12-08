@@ -162,7 +162,8 @@ class SeasonViewSet(viewsets.ModelViewSet):
     queryset = SeasonModel.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = SeasonFilter
-
+    paginate_by = 2000
+    
     def perform_create(self, serializer):
         # if SeasonModel.objects.filter(pguid=serializer.POST['pguid'], year=int(serializer.POST['year'])).exists():
         #     content = {'error_creating_season': 'season with pguid and year already exists'}
